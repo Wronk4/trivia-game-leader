@@ -32,3 +32,30 @@ Aplikacja pozwala szybko rozpocząć quiz i grać razem z innymi uczestnikami na
 - Automatyczne przechodzenie systemu do kolejnego pytania.
 - Generowanie przejściowego rankingu z topką graczy po każdym pytaniu.
 - Zakończenie quizu z ostatecznym podsumowaniem, wyświetlające miejsca 1–3.
+
+## User Stories
+1. **Dołączenie do pokoju**
+Jako gracz chcę dołączyć do pokoju za pomocą kodu, aby uczestniczyć w quizie.
+- użytkownik może wpisać kod pokoju
+- system sprawdza czy pokój istnieje
+- po poprawnym kodzie użytkownik trafia do lobby
+- w przypadku błędnego kodu wyświetla się komunikat
+
+2. **Tworzenie pokoju**
+Jako host chcę utworzyć pokój, aby rozpocząć quiz.
+- host może kliknąć „stwórz pokój”
+- generowany jest unikalny kod
+- pokój trafia do listy aktywnych
+- host trafia do lobby jako administrator
+
+3. **Wyświetlanie listy graczy w lobby**
+Jako gracz chcę widzieć innych uczestników, aby wiedzieć kto bierze udział.
+- lista aktualizuje się w czasie rzeczywistym (WebSocket)
+- nowy gracz pojawia się automatycznie
+- opuszczenie pokoju usuwa gracza z listy
+
+4. **Rozpoczęcie gry**
+Jako host chcę rozpocząć quiz, aby gracze mogli zacząć odpowiadać.
+- tylko host może rozpocząć grę
+- po kliknięciu wszyscy gracze przechodzą do pytania
+- blokowane jest dołączanie nowych graczy
