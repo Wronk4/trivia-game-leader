@@ -59,3 +59,27 @@ Jako host chcę rozpocząć quiz, aby gracze mogli zacząć odpowiadać.
 - tylko host może rozpocząć grę
 - po kliknięciu wszyscy gracze przechodzą do pytania
 - blokowane jest dołączanie nowych graczy
+
+5. **Wyświetlanie pytania**
+Jako gracz chcę widzieć pytanie, aby móc na nie odpowiedzieć.
+- pytanie wyświetla się wszystkim jednocześnie
+- widoczne są możliwe odpowiedzi
+- widoczny jest timer
+
+6. **Odpowiadanie na pytanie**
+Jako gracz chcę wybrać odpowiedź, aby zdobyć punkty.
+- użytkownik może kliknąć tylko jedną odpowiedź
+- odpowiedź jest wysyłana do serwera
+- po wyborze nie można zmienić odpowiedzi
+
+7. **System punktacji**
+Jako gracz chcę zdobywać punkty, aby rywalizować z innymi.
+- poprawna odpowiedź daje punkty
+- szybsza odpowiedź = więcej punktów
+- błędna odpowiedź = 0 punktów
+
+8. **Ranking po pytaniu**
+Jako gracz chcę widzieć ranking, aby znać swoją pozycję.
+- ranking wyświetla top graczy
+- aktualizuje się po każdym pytaniu
+- pokazuje aktualne punkty
