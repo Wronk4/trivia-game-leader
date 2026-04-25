@@ -83,3 +83,26 @@ Jako gracz chcę widzieć ranking, aby znać swoją pozycję.
 - ranking wyświetla top graczy
 - aktualizuje się po każdym pytaniu
 - pokazuje aktualne punkty
+
+9. **Przechodzenie do kolejnego pytania**
+Jako system chcę automatycznie przejść do kolejnego pytania, aby utrzymać tempo gry.
+- po czasie lub odpowiedziach wszystkich graczy następuje przejście
+- wszyscy gracze widzą nowe pytanie jednocześnie
+
+10. **Zakończenie quizu**
+Jako gracz chcę zobaczyć wyniki końcowe, aby wiedzieć kto wygrał.
+- wyświetlany jest ranking końcowy
+- pokazane są miejsca 1–3
+- gra nie pozwala już odpowiadać
+
+11. **Opuszczenie pokoju**
+Jako gracz chcę opuścić pokój, aby zakończyć udział.
+- użytkownik może kliknąć „wyjdź”
+- zostaje usunięty z listy graczy
+- inni widzą aktualizację
+
+12. **Obsługa rozłączenia**
+Jako gracz chcę wrócić do gry po utracie połączenia.
+- system próbuje automatycznego reconnectu
+- gracz wraca do tego samego pokoju
+- stan gry jest zsynchronizowany
