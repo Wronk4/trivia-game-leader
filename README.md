@@ -106,3 +106,37 @@ Jako gracz chcę wrócić do gry po utracie połączenia.
 - system próbuje automatycznego reconnectu
 - gracz wraca do tego samego pokoju
 - stan gry jest zsynchronizowany
+
+13. **Tworzenie quizu**
+Jako host chcę stworzyć własny quiz, aby używać go w grze.
+- można dodać pytania i odpowiedzi
+- można oznaczyć poprawną odpowiedź
+- quiz zapisuje się w systemie (REST API)
+
+14. **Wybór kategorii przed grą**
+Jako host chcę wybrać kategorie, aby użyć go w pokoju.
+- host widzi listę kategorii
+- może wybrać jeden przed startem
+- wybrany quiz jest używany w grze
+
+15. **Powiadomienia w czasie rzeczywistym**
+Jako gracz chcę dostawać powiadomienia o zmianach, aby być na bieżąco.
+- powiadomienia działają przez WebSocket
+- gracz widzi start gry, nowe pytania, ranking
+- brak potrzeby odświeżania strony
+
+16. **Wyrzucanie graczy z lobby (Moderacja)**
+Jako host chcę móc wyrzucić gracza z lobby, aby zapobiec udziałowi niechcianych osób
+- host widzi przycisk "usuń" obok pseudonimu każdego gracza w lobby.
+- po kliknięciu gracz zostaje rozłączony z WebSocketem i widzi komunikat o wyrzuceniu.
+- wyrzucony gracz znika z ekranów pozostałych uczestników.
+
+## Funkcje Dodatkowe (Rozwój)
+- **Szybkie udostępnianie (Kamera/QR):** Wykorzystanie sprzętowej warstwy smartfona do błyskawicznego skanowania kodu QR pokoju, omijające ręczne wpisywanie PIN-u.
+- **Kreator własnych quizów:** Moduł REST API pozwalający hostowi na tworzenie własnych zestawów pytań z precyzyjnym określaniem poprawnych odpowiedzi. W MVP wystarczy mi bazowanie na wbudowanych kategoriach.
+- **Autoryzacja i historia:** Ekran dla zalogowanych graczy pozwalający przeglądać historię swoich gier oraz szczegółowe wyniki per pytanie.
+- **Zaawansowane zarządzanie pokojem (Moderacja):**
+  - Wyrzucanie niechcianych graczy z lobby i bezpośrednie odcinanie ich od połączenia WebSocket.
+  - Ustawianie sztywnego limitu maksymalnej liczby graczy w danym pokoju.
+- **Zarządzanie połączeniem (Edge Cases):** Automatyczny reconnect, który w tle synchronizuje stan gry w przypadku nagłej utraty połączenia przez gracza
+- **Warstwa audio-wizualna:** Działające po stronie klienta (niezależnie od WebSocket) animacje i dźwięki poprawnej/błędnej odpowiedzi oraz tykający pod koniec czasu timer
