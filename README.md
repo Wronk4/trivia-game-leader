@@ -140,3 +140,13 @@ Jako host chcę móc wyrzucić gracza z lobby, aby zapobiec udziałowi niechcian
   - Ustawianie sztywnego limitu maksymalnej liczby graczy w danym pokoju.
 - **Zarządzanie połączeniem (Edge Cases):** Automatyczny reconnect, który w tle synchronizuje stan gry w przypadku nagłej utraty połączenia przez gracza
 - **Warstwa audio-wizualna:** Działające po stronie klienta (niezależnie od WebSocket) animacje i dźwięki poprawnej/błędnej odpowiedzi oraz tykający pod koniec czasu timer
+
+## Dlaczego aplikacja wymaga smartfona?
+- **Wykorzystanie warstwy sprzętowej (Kamera do kodów QR):** Aplikacja oferuje funkcję szybkiego dołączania do pokoju oraz łatwego udostępniania go innym użytkownikom za pomocą skanowania kodu QR. Wymaga to urządzenia z wbudowanym aparatem, który użytkownik ma zawsze pod ręką, smartfon jest do tego naturalnym i najszybszym narzędziem.
+- **Charakter „gry imprezowej” i mobilność graczy:** Projekt jest klasyfikowany m.in. w kategorii "gry imprezowe". Tego typu rozgrywka najczęściej odbywa się w jednym pomieszczeniu (np. na domówce, w klasie), gdzie host zarządza grą, a uczestnicy potrzebują osobistego, przenośnego "pilota" do głosowania. Smartfon pełni rolę prywatnego kontrolera, pozwalając na ukrycie swojego wyboru przed innymi graczami.
+- **Kluczowa rola czasu reakcji i interfejsu dotykowego:** System punktacji zakłada, że "szybsza odpowiedź = więcej punktów". Ekran dotykowy smartfona pozwala na błyskawiczne podjęcie decyzji i fizyczne kliknięcie jednej z 4 możliwych odpowiedzi.
+
+## Prototyp
+![Prototyp](Prototyp.png)
+- **Prototyp (Figma):** [Link do prototypu](https://www.figma.com/design/20NYZ1J9lPz46MyjMS3cbl/Trivia-Game?node-id=0-1&t=MVY1vBF5oASgMm0E-1)
+- **Hasło do prototypu:** `scarf-canvas-slot-decaf`
