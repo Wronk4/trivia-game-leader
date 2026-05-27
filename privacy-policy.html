@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polityka Prywatności — Trivia Game</title>
+  <meta name="description" content="Polityka prywatności aplikacji Trivia Game — multiplayer quiz w czasie rzeczywistym." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-deep:    #12111a;
+      --bg-card:    #1c1b28;
+      --bg-card2:   #242336;
+      --purple:     #6c5ce7;
+      --purple-light: #8b7cf8;
+      --purple-glow: rgba(108, 92, 231, 0.18);
+      --text:       #e8e6f0;
+      --text-muted: #9895b5;
+      --border:     rgba(108, 92, 231, 0.2);
+      --radius:     14px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      overflow: hidden;
+      padding: 72px 24px 60px;
+      text-align: center;
+      background: linear-gradient(160deg, #1a1830 0%, var(--bg-deep) 100%);
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(108,92,231,0.28) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .logo-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--purple) 0%, #a855f7 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 0 32px rgba(108,92,231,0.5);
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--purple-light), #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header h1 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .header-sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .header-badge {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 5px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      color: var(--purple-light);
+      background: var(--purple-glow);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* ── SECTION CARD ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(108,92,231,0.4);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .card-icon {
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      background: var(--purple-glow);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── TABLE ── */
+    .perm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .perm-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: var(--bg-card2);
+      color: var(--purple-light);
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .perm-table th:first-child { border-radius: 8px 0 0 0; }
+    .perm-table th:last-child  { border-radius: 0 8px 0 0; }
+
+    .perm-table td {
+      padding: 10px 14px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+
+    .perm-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+    .perm-table tr:last-child td:last-child  { border-radius: 0 0 8px 0; }
+
+    .badge-no {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: rgba(52,211,153,0.12);
+      color: #34d399;
+      border: 1px solid rgba(52,211,153,0.25);
+    }
+
+    .badge-yes {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: rgba(108,92,231,0.15);
+      color: var(--purple-light);
+      border: 1px solid var(--border);
+    }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      background: linear-gradient(135deg, rgba(108,92,231,0.15) 0%, rgba(168,85,247,0.08) 100%);
+      border: 1px solid rgba(108,92,231,0.35);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .contact-card h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .contact-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .email-link {
+      display: inline-block;
+      padding: 10px 24px;
+      background: linear-gradient(90deg, var(--purple), #a855f7);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(108,92,231,0.4);
+    }
+
+    .email-link:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+    }
+
+    footer a {
+      color: var(--purple-light);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 540px) {
+      .card, .contact-card {
+        padding: 24px 20px;
+      }
+
+      header {
+        padding: 52px 20px 44px;
+      }
+
+      .perm-table th, .perm-table td {
+        padding: 8px 10px;
+        font-size: 0.82rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-wrap">
+      <div class="logo-icon">❓</div>
+      <span class="logo-text">TriviaGame</span>
+    </div>
+    <h1>Polityka Prywatności</h1>
+    <p class="header-sub">Przejrzyste zasady dotyczące Twoich danych</p>
+    <span class="header-badge">Ostatnia aktualizacja: maj 2026</span>
+  </header>
+
+  <main>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">ℹ️</div>
+        <h2>Ogólne informacje</h2>
+      </div>
+      <p>
+        Trivia Game to mobilna aplikacja quizowa multiplayer działająca w czasie rzeczywistym. Niniejsza polityka prywatności wyjaśnia, jakie dane są przetwarzane podczas korzystania z aplikacji oraz w jaki sposób są one chronione.
+      </p>
+      <p>
+        Aplikacja nie wymaga zakładania konta ani podawania danych osobowych. Jedynym identyfikatorem gracza jest wybrany przez niego pseudonim (nickname), który istnieje wyłącznie w ramach aktywnej sesji gry.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">💾</div>
+        <h2>Dane zbierane przez aplikację</h2>
+      </div>
+      <p>
+        Aplikacja <strong>nie zbiera, nie przechowuje ani nie udostępnia danych osobowych</strong> użytkowników w żaden trwały sposób.
+      </p>
+      <p>
+        Pseudonim (nickname) wpisywany przed dołączeniem do pokoju przesyłany jest do serwera gry wyłącznie w celu identyfikacji gracza w obrębie danej sesji. Po zakończeniu lub opuszczeniu pokoju dane te są usuwane.
+      </p>
+      <p>
+        W trakcie rozgrywki serwer przetwarza tymczasowo: wybrany pseudonim, odpowiedzi na pytania oraz czas odpowiedzi (na potrzeby obliczenia punktacji). Żadne z tych danych nie są zapisywane w bazie danych po zakończeniu sesji.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📡</div>
+        <h2>Połączenie z serwerem</h2>
+      </div>
+      <p>
+        Komunikacja między aplikacją a serwerem odbywa się przez protokół <strong>SignalR (WebSocket)</strong> oraz HTTPS. Połączenie jest szyfrowane. Serwer nie loguje adresów IP ani danych identyfikujących urządzenie użytkownika.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📷</div>
+        <h2>Aparat (kamera)</h2>
+      </div>
+      <p>
+        Aplikacja może prosić o dostęp do aparatu w celu <strong>skanowania kodu QR</strong> pokoju. Uprawnienie to jest wymagane wyłącznie na żądanie użytkownika — gdy ten wybierze opcję skanowania.
+      </p>
+      <p>
+        Żadne zdjęcia ani nagrania wideo nie są wykonywane, przechowywane ani wysyłane. Dostęp do kamery można w każdej chwili cofnąć w ustawieniach systemu Android.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🔒</div>
+        <h2>Uprawnienia aplikacji</h2>
+      </div>
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th>Uprawnienie</th>
+            <th>Cel</th>
+            <th>Dane wysyłane?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CAMERA</td>
+            <td>Skanowanie kodu QR pokoju</td>
+            <td><span class="badge-no">Nie</span></td>
+          </tr>
+          <tr>
+            <td>INTERNET</td>
+            <td>Połączenie z serwerem gry (SignalR / HTTPS)</td>
+            <td><span class="badge-yes">Tak — dane sesji</span></td>
+          </tr>
+          <tr>
+            <td>ACCESS_NETWORK_STATE</td>
+            <td>Wykrywanie dostępności sieci</td>
+            <td><span class="badge-no">Nie</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🧒</div>
+        <h2>Dzieci i nieletni</h2>
+      </div>
+      <p>
+        Aplikacja jest przeznaczona dla użytkowników w każdym wieku. Nie zbiera żadnych danych osobowych, nie zawiera reklam ani zakupów w aplikacji. Nie kierujemy świadomie żadnych działań marketingowych do dzieci poniżej 13. roku życia.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🔄</div>
+        <h2>Zmiany w polityce prywatności</h2>
+      </div>
+      <p>
+        Zastrzegamy sobie prawo do aktualizacji niniejszej polityki prywatności. Wszelkie zmiany zostaną opublikowane na tej stronie z nową datą aktualizacji. Zachęcamy do jej okresowego przeglądania.
+      </p>
+    </div>
+
+    <div class="contact-card">
+      <h2>Kontakt</h2>
+      <p>Masz pytania dotyczące prywatności lub tej polityki? Napisz do nas.</p>
+      <a class="email-link" href="mailto:kacper.wrona123321@gmail.com">kacper.wrona123321@gmail.com</a>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>
+      &copy; 2026 TriviaGame &nbsp;·&nbsp;
+      <a href="https://github.com/WCiovh/triviagame_flutter" target="_blank" rel="noopener">Frontend (Flutter)</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/arekminajj/trivia-game-backend" target="_blank" rel="noopener">Backend (ASP.NET Core)</a>
+    </p>
+  </footer>
+
+</body>
+</html>
