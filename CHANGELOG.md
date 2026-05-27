@@ -99,3 +99,11 @@
   - `RoomService` — tworzenie/dołączanie do pokoi, generowanie kodów
   - Endpointy REST + SignalR Hub (`GameHub`)
   - Konfiguracja CORS i Swagger
+
+## Autorzy
+
+| Autor | GitHub | Rola |
+|---|---|---|
+| Kacper Wrona | [@Wronk4](https://github.com/Wronk4) | Lider Projektu |
+| Wiktor Cioch | [@WCiovh](https://github.com/WCiovh) | Frontend (Flutter) |
+| Arkadiusz Cios | [@arekminajj](https://github.com/arekminajj) | Backend (ASP.NET Core) |
