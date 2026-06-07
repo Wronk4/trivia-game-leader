@@ -166,6 +166,13 @@ Jako host chcę móc wyrzucić gracza z lobby, aby zapobiec udziałowi niechcian
   <img src="Screeny/Picture1.png" width="200" />
 </div>
 
+## Dokumentacja API
+
+- Backend: [arekminajj/trivia-game-backend](https://github.com/arekminajj/trivia-game-backend)
+- Base URL: `http://trivia.arkadiuszcios.online`
+- Specyfikacja OpenAPI: [docs/openapi.yaml](docs/openapi.yaml)
+
+Pelna dokumentacja endpointow REST oraz SignalR Hub dostepna w [docs/api_documentation.md](docs/api_documentation.md).
 
 # Changelog — Trivia Game
 

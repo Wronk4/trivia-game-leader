@@ -1,0 +1,373 @@
+openapi: 3.0.3
+info:
+  title: Trivia Game API
+  description: |
+    REST API + SignalR Hub dla aplikacji Trivia Game.
+
+    ## Uwierzytelnianie
+    Wszystkie endpointy wymagają klucza API przekazywanego w nagłówku `X-Api-Key`.
+    Hub SignalR przyjmuje klucz jako query parameter `?api-key=<KEY>`.
+
+  version: "1.0.0"
+  contact:
+    name: trivia-game-backend
+    url: https://github.com/arekminajj/trivia-game-backend
+
+servers:
+  - url: http://trivia.arkadiuszcios.online
+    description: Serwer produkcyjny
+
+security:
+  - ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+
+  schemas:
+
+    # ── Requests ──────────────────────────────────────────────────────────────
+
+    CreateRoomRequest:
+      type: object
+      required:
+        - ownerName
+      properties:
+        ownerName:
+          type: string
+          example: "Kacper"
+          description: Wyświetlana nazwa właściciela pokoju.
+        amount:
+          type: integer
+          nullable: true
+          default: 10
+          example: 10
+          description: Liczba pytań w grze (domyślnie 10).
+        categoryId:
+          type: integer
+          nullable: true
+          example: 9
+          description: ID kategorii z Open Trivia DB. Jeśli null – losowe pytania ze wszystkich kategorii.
+        type:
+          type: string
+          nullable: true
+          enum: [multiple, boolean]
+          default: multiple
+          example: "multiple"
+          description: Typ pytań – wielokrotny wybór lub prawda/fałsz.
+
+    JoinRoomRequest:
+      type: object
+      required:
+        - joinCode
+        - displayName
+      properties:
+        joinCode:
+          type: string
+          example: "ABC123"
+          description: 6-znakowy kod pokoju do dołączenia.
+        displayName:
+          type: string
+          example: "Kacper"
+          description: Wyświetlana nazwa gracza.
+
+    # ── Responses ─────────────────────────────────────────────────────────────
+
+    PlayerResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: "a3f1c2d4-0011-4a2b-bc3d-ff0011223344"
+          description: Unikalny identyfikator gracza w sesji.
+        displayName:
+          type: string
+          example: "Kacper"
+        points:
+          type: integer
+          example: 150
+          description: Aktualna liczba punktów gracza.
+        correctAnswers:
+          type: integer
+          example: 3
+          description: Liczba poprawnych odpowiedzi.
+
+    RoomResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: "b7e2a1d0-ffaa-4c3b-8d1e-aabbccddeeff"
+          description: Unikalny identyfikator pokoju.
+        joinCode:
+          type: string
+          example: "ABC123"
+          description: Kod używany przez innych graczy do dołączenia.
+        status:
+          type: string
+          enum: [Waiting, InProgress, Finished]
+          example: "Waiting"
+          description: Aktualny status pokoju.
+        owner:
+          $ref: "#/components/schemas/PlayerResponse"
+        members:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
+          description: Lista wszystkich graczy w pokoju (włącznie z właścicielem).
+        totalQuestions:
+          type: integer
+          example: 10
+        currentQuestionIndex:
+          type: integer
+          example: 0
+          description: Indeks aktualnego pytania (0-based).
+        categoryName:
+          type: string
+          example: "General Knowledge"
+
+    CreateRoomResponse:
+      description: Odpowiedź po pomyślnym stworzeniu pokoju.
+      allOf:
+        - $ref: "#/components/schemas/RoomResponse"
+      example:
+        uuid: "b7e2a1d0-ffaa-4c3b-8d1e-aabbccddeeff"
+        joinCode: "ABC123"
+        status: "Waiting"
+        owner:
+          uuid: "a3f1c2d4-0011-4a2b-bc3d-ff0011223344"
+          displayName: "Kacper"
+          points: 0
+          correctAnswers: 0
+        members:
+          - uuid: "a3f1c2d4-0011-4a2b-bc3d-ff0011223344"
+            displayName: "Kacper"
+            points: 0
+            correctAnswers: 0
+        totalQuestions: 10
+        currentQuestionIndex: 0
+        categoryName: "General Knowledge"
+
+    JoinRoomResponse:
+      type: object
+      properties:
+        yourPlayerUuid:
+          type: string
+          format: uuid
+          example: "c9d8e7f6-1122-5d4c-9e2f-bbccddee0011"
+          description: UUID gracza dołączającego – wymagane do dalszych operacji przez Hub.
+        room:
+          $ref: "#/components/schemas/RoomResponse"
+
+    QuestionResponse:
+      type: object
+      properties:
+        index:
+          type: integer
+          example: 0
+          description: Numer pytania (0-based).
+        total:
+          type: integer
+          example: 10
+          description: Całkowita liczba pytań w grze.
+        text:
+          type: string
+          example: "What is the capital of France?"
+        category:
+          type: string
+          example: "Geography"
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+          example: "medium"
+        type:
+          type: string
+          enum: [multiple, boolean]
+          example: "multiple"
+        answers:
+          type: array
+          items:
+            type: string
+          example: ["Paris", "London", "Berlin", "Madrid"]
+          description: Lista odpowiedzi (przetasowana; poprawna jest jedną z nich).
+
+    RoundResultResponse:
+      type: object
+      properties:
+        correctAnswer:
+          type: string
+          example: "Paris"
+          description: Poprawna odpowiedź na zakończone pytanie.
+        players:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlayerResponse"
+          description: Zaktualizowana tablica graczy z nowymi punktami.
+
+    TriviaCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 9
+        name:
+          type: string
+          example: "General Knowledge"
+
+    # ── Errors ────────────────────────────────────────────────────────────────
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Room 'XYZ999' not found."
+
+# ── Paths ─────────────────────────────────────────────────────────────────────
+
+paths:
+
+  /api/trivia/categories:
+    get:
+      tags: [Trivia]
+      summary: Pobierz listę kategorii
+      description: |
+        Zwraca wszystkie dostępne kategorie pytań z Open Trivia DB.
+        Wynik jest proxy/cache z zewnętrznego API.
+      operationId: getCategories
+      responses:
+        "200":
+          description: Lista kategorii
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TriviaCategory"
+              example:
+                - id: 9
+                  name: "General Knowledge"
+                - id: 17
+                  name: "Science & Nature"
+                - id: 23
+                  name: "History"
+        "401":
+          description: Brak lub nieprawidłowy klucz API
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Zewnętrzne API (Open Trivia DB) niedostępne
+
+  /api/rooms:
+    get:
+      tags: [Rooms]
+      summary: Pobierz aktywne pokoje
+      description: Zwraca listę wszystkich aktywnie oczekujących lub trwających pokojów.
+      operationId: getRooms
+      responses:
+        "200":
+          description: Lista aktywnych pokojów
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RoomResponse"
+        "401":
+          description: Brak lub nieprawidłowy klucz API
+
+    post:
+      tags: [Rooms]
+      summary: Utwórz nowy pokój
+      description: |
+        Tworzy nowy pokój gry. Gracz staje się właścicielem (host).
+        Po wywołaniu tego endpointu należy natychmiast nawiązać połączenie
+        z Hub SignalR i wywołać `ConnectToRoom` z otrzymanym `joinCode` i `owner.uuid`.
+      operationId: createRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoomRequest"
+            example:
+              ownerName: "Kacper"
+              amount: 10
+              categoryId: 9
+              type: "multiple"
+      responses:
+        "200":
+          description: Pokój pomyślnie utworzony
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateRoomResponse"
+        "400":
+          description: Nieprawidłowe dane wejściowe (np. pusta nazwa)
+        "401":
+          description: Brak lub nieprawidłowy klucz API
+        "502":
+          description: Błąd podczas pobierania pytań z Open Trivia DB
+
+  /api/rooms/join:
+    post:
+      tags: [Rooms]
+      summary: Dołącz do istniejącego pokoju
+      description: |
+        Dołącza gracza do pokoju identyfikowanego kodem `joinCode`.
+        Po wywołaniu należy nawiązać połączenie z Hub SignalR
+        i wywołać `ConnectToRoom` z `joinCode` i `yourPlayerUuid`.
+      operationId: joinRoom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JoinRoomRequest"
+            example:
+              joinCode: "ABC123"
+              displayName: "Arek"
+      responses:
+        "200":
+          description: Dołączono pomyślnie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JoinRoomResponse"
+              example:
+                yourPlayerUuid: "c9d8e7f6-1122-5d4c-9e2f-bbccddee0011"
+                room:
+                  uuid: "b7e2a1d0-ffaa-4c3b-8d1e-aabbccddeeff"
+                  joinCode: "ABC123"
+                  status: "Waiting"
+                  owner:
+                    uuid: "a3f1c2d4-0011-4a2b-bc3d-ff0011223344"
+                    displayName: "Kacper"
+                    points: 0
+                    correctAnswers: 0
+                  members:
+                    - uuid: "a3f1c2d4-0011-4a2b-bc3d-ff0011223344"
+                      displayName: "Kacper"
+                      points: 0
+                      correctAnswers: 0
+                  totalQuestions: 10
+                  currentQuestionIndex: 0
+                  categoryName: "General Knowledge"
+        "404":
+          description: Pokój o podanym kodzie nie istnieje
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: "Room 'XYZ999' not found."
+        "400":
+          description: Nieprawidłowe dane (np. pusta nazwa gracza)
+        "401":
+          description: Brak lub nieprawidłowy klucz API
