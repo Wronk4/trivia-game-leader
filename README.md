@@ -74,9 +74,8 @@ Jako gracz chcę wybrać odpowiedź, aby zdobyć punkty.
 
 7. **System punktacji**
 Jako gracz chcę zdobywać punkty, aby rywalizować z innymi.
-- poprawna odpowiedź daje punkty
-- szybsza odpowiedź = więcej punktów
-- błędna odpowiedź = 0 punktów
+- poprawna odpowiedź daje punkty w zależności od poziomu trudności (łatwe: 100, średnie: 200, trudne: 300)
+- błędna odpowiedź lub brak odpowiedzi = 0 punktów
 
 8. **Ranking po pytaniu**
 Jako gracz chcę widzieć ranking, aby znać swoją pozycję.
@@ -103,33 +102,20 @@ Jako gracz chcę opuścić pokój, aby zakończyć udział.
 
 12. **Obsługa rozłączenia**
 Jako gracz chcę wrócić do gry po utracie połączenia.
-- system próbuje automatycznego reconnectu
-- gracz wraca do tego samego pokoju
-- stan gry jest zsynchronizowany
+- system próbuje automatycznego reconnectu na poziomie WebSocket
+- w przypadku zerwania połączenia aplikacja ponawia próbę połączenia z Hubem
 
-13. **Tworzenie quizu**
-Jako host chcę stworzyć własny quiz, aby używać go w grze.
-- można dodać pytania i odpowiedzi
-- można oznaczyć poprawną odpowiedź
-- quiz zapisuje się w systemie (REST API)
-
-14. **Wybór kategorii przed grą**
-Jako host chcę wybrać kategorie, aby użyć go w pokoju.
+13. **Wybór kategorii przed grą**
+Jako host chcę wybrać kategorię, aby użyć jej w pokoju.
 - host widzi listę kategorii
-- może wybrać jeden przed startem
-- wybrany quiz jest używany w grze
+- może wybrać jedną przed startem
+- wybrana kategoria jest używana w grze
 
-15. **Powiadomienia w czasie rzeczywistym**
+14. **Powiadomienia w czasie rzeczywistym**
 Jako gracz chcę dostawać powiadomienia o zmianach, aby być na bieżąco.
 - powiadomienia działają przez WebSocket
 - gracz widzi start gry, nowe pytania, ranking
 - brak potrzeby odświeżania strony
-
-16. **Wyrzucanie graczy z lobby (Moderacja)**
-Jako host chcę móc wyrzucić gracza z lobby, aby zapobiec udziałowi niechcianych osób
-- host widzi przycisk "usuń" obok pseudonimu każdego gracza w lobby.
-- po kliknięciu gracz zostaje rozłączony z WebSocketem i widzi komunikat o wyrzuceniu.
-- wyrzucony gracz znika z ekranów pozostałych uczestników.
 
 ## Funkcje Dodatkowe (Rozwój)
 - **Szybkie udostępnianie (Kamera/QR):** Wykorzystanie sprzętowej warstwy smartfona do błyskawicznego skanowania kodu QR pokoju, omijające ręczne wpisywanie PIN-u.
