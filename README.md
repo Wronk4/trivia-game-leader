@@ -152,13 +152,15 @@ Jako gracz chcę dostawać powiadomienia o zmianach, aby być na bieżąco.
   <img src="Screeny/Picture1.png" width="200" />
 </div>
 
-## Dokumentacja API
+## Dokumentacja
 
 - Backend: [arekminajj/trivia-game-backend](https://github.com/arekminajj/trivia-game-backend)
 - Base URL: `http://trivia.arkadiuszcios.online`
 - Specyfikacja OpenAPI: [docs/openapi.yaml](docs/openapi.yaml)
 
-Pelna dokumentacja endpointow REST oraz SignalR Hub dostepna w [docs/api_documentation.md](docs/api_documentation.md).
+Pełna dokumentacja endpointów REST oraz SignalR Hub: [docs/api_documentation.md](docs/api_documentation.md)
+
+Instrukcja użytkownika: [docs/user_guide.md](docs/user_guide.md)
 
 # Changelog — Trivia Game
 
