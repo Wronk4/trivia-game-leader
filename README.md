@@ -3,6 +3,9 @@
 ## Krótki opis:
 Quiz multiplayer na żywo – twórz pokoje i rywalizuj ze znajomymi.
 
+## Testy wewnętrzne (Google Play)
+[Dołącz do testów na Androida](https://play.google.com/apps/internaltest/4701590140570213987)
+
 ## Pełny opis aplikacji
 Rywalizuj ze znajomymi w quizach multiplayer w czasie rzeczywistym. Twórz własne pokoje, dołączaj za pomocą kodu lub QR i sprawdzaj swoją wiedzę w dynamicznych rozgrywkach online.
 Aplikacja pozwala szybko rozpocząć quiz i grać razem z innymi uczestnikami na żywo. Host może tworzyć pokoje, wybierać kategorie oraz zarządzać przebiegiem gry, a gracze odpowiadają na pytania i zdobywają punkty za poprawność oraz szybkość odpowiedzi.
