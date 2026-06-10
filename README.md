@@ -120,6 +120,14 @@ Jako gracz chcę dostawać powiadomienia o zmianach, aby być na bieżąco.
 - gracz widzi start gry, nowe pytania, ranking
 - brak potrzeby odświeżania strony
 
+15. **Cykliczne powiadomienia przypominające (Powiadomienia lokalne)**
+Jako gracz chcę otrzymywać codzienne przypomnienia o stałej porze, aby systematycznie uczestniczyć w rozgrywkach trivia ze znajomymi.
+- system weryfikuje status uprawnień do wyświetlania powiadomień lokalnych na systemach Android oraz iOS
+- w przypadku braku wymaganych uprawnień aplikacja inicjuje systemowy monit o ich przyznanie
+- po uzyskaniu autoryzacji system rejestruje cykliczne powiadomienie lokalne, zaplanowane na godzinę 18:00 czasu lokalnego
+- powiadomienie wyświetla się ze zdefiniowanym nagłówkiem oraz treścią zachęcającą do gry
+- interakcja z powiadomieniem (kliknięcie) powoduje uruchomienie aplikacji i przejście do ekranu głównego
+
 ## Funkcje Dodatkowe (Rozwój)
 - **Szybkie udostępnianie (Kamera/QR):** Wykorzystanie sprzętowej warstwy smartfona do błyskawicznego skanowania kodu QR pokoju, omijające ręczne wpisywanie PIN-u.
 - **Kreator własnych quizów:** Moduł REST API pozwalający hostowi na tworzenie własnych zestawów pytań z precyzyjnym określaniem poprawnych odpowiedzi. W MVP wystarczy mi bazowanie na wbudowanych kategoriach.
