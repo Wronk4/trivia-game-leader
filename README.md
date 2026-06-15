@@ -163,6 +163,55 @@ Jako gracz chcę otrzymywać codzienne przypomnienia o stałej porze, aby system
   <img src="Screeny/Picture1.png" width="200" />
 </div>
 
+## Persony użytkowników
+
+### Persona 1 — Organizator rozgrywki towarzyskiej
+
+**Michał Kowalski, 23 lata — student informatyki, Kraków**
+
+#### Charakterystyka
+
+Michał regularnie organizuje spotkania towarzyskie w gronie znajomych ze studiów. Szuka form aktywności, które angażują całą grupę bez konieczności tworzenia kont przez uczestników. Zna aplikacje typu Kahoot i szuka podobnych narzędzi działających na smartfonach. Pełni w aplikacji rolę hosta — tworzy pokój, wybiera kategorię i zarządza przebiegiem gry.
+
+#### Cele
+
+- Szybkie uruchomienie quizu dla grupy 4–10 osób bez rejestracji uczestników.
+- Dobór kategorii pytań odpowiedniej dla grupy (np. Sport, Film, Nauka).
+- Kontrola nad startem gry i możliwość jej restartu bez tworzenia nowego pokoju.
+- Udostępnienie kodu dołączenia innym graczom możliwie najszybciej (QR lub kod słowny).
+
+#### Frustracje
+
+- Aplikacje wymagające zakładania kont przez każdego uczestnika.
+- Desynchronizacja pytań między urządzeniami graczy.
+- Brak funkcji restartu — konieczność tworzenia nowego pokoju po każdej rundzie.
+- Skomplikowany interfejs wymagający tłumaczenia kolejnych kroków innym uczestnikom.
+
+---
+
+### Persona 2 — Gracz nastawiony na rywalizację
+
+**Zofia Nowak, 19 lat — studentka I roku, Wrocław**
+
+#### Charakterystyka
+
+Zofię motywuje rywalizacja i widoczność wyników. Stara się odpowiadać poprawnie na pytania z wyższych poziomów trudności, ponieważ rozumie, że przekładają się na więcej punktów. Regularnie sprawdza ranking po każdym pytaniu. Ekran podium traktuje jako wynik, którym warto się podzielić.
+
+#### Cele
+
+- Dołączenie do pokoju w kilka sekund, bez konieczności tworzenia konta.
+- Uzyskanie natychmiastowego feedbacku po wyborze odpowiedzi (poprawna/błędna).
+- Śledzenie aktualnej pozycji w rankingu na bieżąco.
+- Znalezienie się w top 3 i zobaczenie podium na ekranie końcowym.
+
+#### Frustracje
+
+- Brak potwierdzenia poprawności odpowiedzi bezpośrednio po jej wyborze.
+- Nieaktualne dane w rankingu — opóźnienie w odświeżaniu wyników.
+- Konieczność czekania na gracza, który nie kliknął „Gotowy" po pytaniu.
+
+---
+
 ## Dokumentacja
 
 - Backend: [arekminajj/trivia-game-backend](https://github.com/arekminajj/trivia-game-backend)
