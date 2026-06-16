@@ -335,3 +335,152 @@ Instrukcja użytkownika: [docs/user_guide.md](docs/user_guide.md)
 
 ---
 *Projekt tworzony w ramach przedmiotu Programowanie aplikacji mobilnych.*
+# Checklista testów akceptacyjnych
+
+## Autoryzacja i bezpieczeństwo
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| A1 | Brak klucza API | Wyślij żądanie REST do `/api/rooms` bez nagłówka `X-Api-Key` | Odpowiedź `401 Unauthorized` z `{"error": "Invalid or missing API key."}` |
+| A2 | Błędny klucz API | Wyślij żądanie z nagłówkiem `X-Api-Key: zly-klucz` | Odpowiedź `401 Unauthorized` |
+| A3 | Hub SignalR wymaga klucza | Otwórz połączenie WebSocket z hubem **bez** parametru `api-key` w URL | Połączenie zostaje odrzucone |
+| A4 | Endpoint `/privacy` jest publiczny | Wyślij żądanie GET na `/privacy` bez żadnego klucza | Odpowiedź `200 OK` ze stroną polityki prywatności |
+
+---
+
+## Tworzenie pokoju
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| B1 | Stworzenie pokoju z nickiem | 1. Uruchom aplikację → naciśnij „Stwórz pokój"<br>2. Wpisz nick (np. `Alice`)<br>3. Opcjonalnie wybierz kategorię (np. *Science*)<br>4. Naciśnij „Utwórz pokój" | Przejście do lobby; wyświetlony kod pokoju (6 znaków) oraz kod QR |
+| B2 | Wybór kategorii | W ekranie tworzenia pokoju naciśnij rozwijane menu „Kategoria" | Lista kategorii z Open Trivia DB jest widoczna i można ją przewijać; pierwsza opcja to „Dowolna kategoria" |
+| B3 | Wyświetlenie QR w lobby | Po stworzeniu pokoju naciśnij „Pokaż QR" w lobby | Wyświetla się kod QR zakodowujący kod dołączenia do pokoju |
+| B4 | Kategoria widoczna w lobby | Stwórz pokój z kategorią *Sports*, przejdź do lobby | Nazwa wybranej kategorii jest widoczna poniżej przycisków akcji dla wszystkich uczestników |
+
+---
+
+## Dołączanie do pokoju
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| C1 | Dołączenie kodem ręcznym | 1. Na drugim urządzeniu naciśnij „Dołącz do pokoju"<br>2. Wpisz nick (np. `Bob`)<br>3. Wpisz 6-znakowy kod pokoju<br>4. Naciśnij „Dołącz" | Przejście do lobby; gracz widoczny na liście uczestników |
+| C2 | Dołączenie przez skan QR | 1. Wpisz nick<br>2. Naciśnij „Skanuj kod QR"<br>3. Nakieruj aparat na kod QR wyświetlony w lobby hosta | Aplikacja automatycznie odczytuje kod i przenosi do lobby |
+| C3 | Udostępnienie linku/kodu pokoju | W lobby naciśnij przycisk „Udostępnij" | Otwiera się systemowe menu udostępniania z kodem/linkiem do pokoju |
+| C4 | Błędny kod — za krótki | Wpisz kod krótszy niż 6 znaków i naciśnij „Dołącz" | Wyświetlany jest komunikat: „Kod pokoju musi mieć 6 znaków!" |
+| C5 | Błędny kod — nieistniejący | Wpisz dokładnie 6 znaków nieistniejącego pokoju (np. `ZZZZZZ`) i naciśnij „Dołącz" | Wyświetlany jest komunikat błędu; brak przejścia do lobby |
+| C6 | Nick zapamiętany po sesji | Dołącz do pokoju z nickiem `TestGracz`; wyjdź i wejdź ponownie w ekran dołączania | Pole nick jest wstępnie uzupełnione wartością `TestGracz` |
+
+---
+
+## Lobby i synchronizacja
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| D1 | Lista graczy aktualizuje się w czasie rzeczywistym | Mając otwarte lobby na urządzeniu hosta, dołącz kolejnym urządzeniem | Na urządzeniu hosta nowy gracz pojawia się na liście bez odświeżania |
+| D2 | Tylko host widzi „Rozpocznij grę" | Otwórz lobby na urządzeniu gracza (nie hosta) | Przycisk „Rozpocznij grę" nie jest widoczny; gracz widzi przycisk „Opuść pokój" i komunikat „Czekam na hosta..." |
+| D3 | Start gry wymaga co najmniej 2 graczy | Jako jedyny gracz w lobby (host) naciśnij „Rozpocznij grę" | Przycisk jest nieaktywny; gra nie startuje |
+| D4 | Gracz opuszcza lobby | Gracz (nie-host) naciska „Opuść pokój" | Gracz znika z listy uczestników u hosta i pozostałych graczy |
+| D5 | Host rozłączył się — gracze w lobby | Host wyjdzie z aplikacji podczas gdy gracze są w lobby | Gracze są automatycznie przenoszeni do menu głównego |
+
+---
+
+## Przebieg gry
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| E1 | Host rozpoczyna grę | Jako host (przy co najmniej 2 graczach) naciśnij „Rozpocznij grę" | Wszystkie urządzenia jednocześnie przechodzą do ekranu z pytaniem |
+| E2 | Blokada nowych graczy po starcie | Po naciśnięciu „Rozpocznij grę" przez hosta, spróbuj dołączyć nowym urządzeniem tym samym kodem | Dołączenie jest niemożliwe; wyświetlany komunikat błędu |
+| E3 | Pytanie widoczne u wszystkich | Rozpocznij grę mając co najmniej 2 urządzenia w lobby | Treść pytania i wszystkie odpowiedzi są identyczne na każdym urządzeniu jednocześnie |
+| E4 | Timer 30 sekund | Obserwuj ekran pytania po jego wyświetleniu | Odliczanie od 30 startuje automatycznie i jest widoczne |
+| E5 | Auto-przejście po czasie | Nie odpowiadaj na pytanie; odczekaj 30 sekund | Pojawia się napis „Czas minął!"; gra automatycznie przechodzi do ekranu rankingu rundy |
+| E6 | Dialog wyjścia podczas gry | Naciśnij systemowy przycisk „Wstecz" podczas rozgrywki | Pojawia się dialog „Opuścić grę?" z opcjami „Tak" / „Nie" |
+
+---
+
+## Odpowiadanie i punktacja
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| F1 | Wybór jednej odpowiedzi | Naciśnij dowolny przycisk odpowiedzi | Odpowiedź zostaje zaznaczona (kolor niebieski); pozostałe przyciski stają się nieaktywne |
+| F2 | Brak możliwości zmiany odpowiedzi | Po wyborze odpowiedzi naciśnij inny przycisk | Nic się nie dzieje; pierwsza odpowiedź pozostaje wybrana |
+| F3 | Wysłanie odpowiedzi do serwera | Wybierz odpowiedź; obserwuj że UI blokuje dalsze kliknięcia | Aplikacja wywołuje `SubmitAnswer` przez SignalR; pojawia się komunikat „Czekam na pozostałych graczy..." |
+| F4 | Poprawna odpowiedź = punkty | Odpowiedz poprawnie na pytanie, przejdź do rankingu rundy | Wynik gracza wzrósł względem poprzedniej rundy |
+| F5 | Błędna odpowiedź = 0 punktów | Celowo odpowiedz błędnie; przejdź do rankingu rundy | Wynik gracza nie zmienił się względem poprzedniej rundy |
+| F6 | Brak odpowiedzi = 0 punktów | Nie odpowiadaj przez cały czas trwania pytania (30s) | Wynik gracza nie zmienił się; gra automatycznie kontynuuje |
+
+---
+
+## Ranking i wyniki
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| G1 | Ranking po pytaniu | Odpowiedz na pytanie (lub odczekaj timer); poczekaj na zakończenie rundy | Ekran rankingu pokazuje wszystkich graczy z aktualnymi punktami |
+| G2 | Przejście do kolejnego pytania | Na ekranie rankingu naciśnij „Następne pytanie" | Wszyscy gracze widzą nowe pytanie jednocześnie |
+| G3 | Podium na końcu gry | Przejdź przez wszystkie pytania quizu | Wyświetlony ekran podsumowania z podium (miejsca 1–3) oraz pełną listą poniżej |
+
+---
+
+## Restart gry i nawigacja
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| H1 | Host restartuje grę | Na ekranie podsumowania host wybiera kategorię z dropdownu i naciska „Zagraj ponownie" | Wszyscy gracze są przeniesieni z powrotem do lobby tego samego pokoju |
+| H2 | Nick hosta po restarcie | Po restarcie sprawdź listę graczy w lobby | Nick hosta jest taki sam jak przed restartem |
+| H3 | Gracze oczekują na restart | Ekran podsumowania na urządzeniu gracza (nie hosta) | Widoczny spinner i komunikat „Oczekuję na hosta..." |
+| H4 | Potwierdzenie wyjścia z gry | Naciśnij „Wstecz" podczas rozgrywki, następnie w dialogu naciśnij „Tak" | Połączenie SignalR zostaje rozłączone; użytkownik wraca do menu głównego |
+| H5 | Anulowanie wyjścia z gry | Naciśnij „Wstecz" podczas rozgrywki, następnie w dialogu naciśnij „Nie" | Dialog zamknął się; użytkownik pozostaje na tym samym ekranie |
+
+---
+
+## Obsługa błędów i połączenia
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| I1 | Ekran ładowania — tworzenie pokoju | Naciśnij „Utwórz pokój" z nickiem | Wyświetlany jest ekran ładowania z komunikatem „Tworzenie pokoju..." |
+| I2 | Ekran ładowania — dołączanie | Naciśnij „Dołącz" z poprawnym kodem | Wyświetlany jest ekran ładowania z komunikatem „Dołączanie do pokoju..." |
+| I3 | Błąd serwera | Wyłącz backend i spróbuj stworzyć/dołączyć do pokoju | Wyświetlany jest ekran błędu z komunikatem i przyciskiem „Spróbuj ponownie" |
+| I4 | Brak połączenia internetowego | Wyłącz Wi-Fi/dane mobilne i naciśnij „Utwórz pokój" lub „Dołącz" | Wyświetlany jest ekran braku połączenia z przyciskiem „Spróbuj ponownie" |
+| I5 | Host rozłączył się podczas gry | Podczas rozgrywki host zamknie aplikację | Gracze zostają przeniesieni do menu głównego |
+
+---
+
+## Powiadomienia lokalne
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| J1 | Prośba o uprawnienia (Android 13+) | Uruchom aplikację po raz pierwszy na Androidzie 13+ | System wyświetla dialog z prośbą o zgodę na powiadomienia |
+| J2 | Prośba o uprawnienia (iOS) | Uruchom aplikację po raz pierwszy na iOS | System wyświetla dialog z prośbą o zgodę na powiadomienia |
+| J3 | Zaplanowane powiadomienie o 18:00 | Zainstaluj aplikację i udziel zgody; odczekaj do godz. 18:00 | O 18:00 pojawia się powiadomienie z tytułem „Czas na trivia!" |
+| J4 | Treść powiadomienia | Poczekaj na powiadomienie o 18:00 | Treść to: „Zagraj rundę z przyjaciółmi i sprawdź kto jest najlepszy!" |
+| J5 | Przywrócenie po restarcie urządzenia | Udziel zgody, zrestartuj urządzenie, odczekaj do 18:00 | Powiadomienie pojawia się mimo restartu urządzenia |
+
+---
+
+## Natywne funkcje urządzenia
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| K1 | Uprawnienia do kamery | Wpisz nick, naciśnij „Skanuj kod QR" — jeśli kamera nie ma uprawnień | Aplikacja prosi o uprawnienie do kamery; po akceptacji kamera się uruchamia |
+| K2 | Skan kodu QR | Naciśnij „Skanuj kod QR" i nakieruj kamerę na kod QR pokoju | Aplikacja odczytuje kod i automatycznie przenosi do lobby |
+| K3 | Udostępnienie linku/kodu pokoju | W lobby naciśnij przycisk „Udostępnij" | Otwiera się systemowe menu udostępniania z kodem/linkiem do pokoju |
+
+---
+
+## Backend i infrastruktura
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| L1 | Backend dostępny publicznie | Otwórz w przeglądarce `https://trivia.arkadiuszcios.online/scalar/v1` | Wyświetla się interaktywna dokumentacja API |
+| L2 | Wygasanie danych w Redis | Zakończ grę i odczekaj czas TTL (brak aktywności w pokoju) | Pokój nie istnieje już w Redis; próba dołączenia starym kodem zwraca błąd |
+| L3 | Aplikacja w Google Play | Otwórz link do testów wewnętrznych Google Play | Aplikacja dostępna do pobrania; instaluje się bez błędów |
+| L4 | CI/CD — backend | Wypchnij commit do brancha `main` w repo backendu | GitHub Actions uruchamia pipeline; wynik widoczny w zakładce Actions |
+| L5 | CI/CD — frontend | Wypchnij commit do brancha `main` w repo frontendu | GitHub Actions uruchamia pipeline; wynik widoczny w zakładce Actions |
+
+---
+
+## Testy backendu
+
+| # | Opis | Kroki | Oczekiwany wynik |
+|---|------|-------|------------------|
+| M1 | Testy jednostkowe | W katalogu backendu uruchom `dotnet test` | Wszystkie testy przechodzą bez błędów |
+| M2 | Testy integracyjne | Uruchom `python test_game.py` z katalogu `Tests/` (wymaga Python 3.9+ i działającego backendu) | Skrypt weryfikuje pełny przepływ API i kończy się sukcesem |
